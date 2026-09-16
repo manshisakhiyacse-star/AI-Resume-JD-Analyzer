@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume & Job Description Analyzer</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-wand-magic-sparkles logo-icon"></i>
+                <span class="logo-text">Resume <span class="accent-text">Detector</span></span>
+            </div>
+            <div class="header-tag">
+                <span class="pulse-dot"></span>
+                <span>AI Core v1.0.0</span>
+            </div>
+        </header>
+
+        <!-- Main Grid Layout -->
+        <main class="app-main-grid">
+            
+            <!-- Left Side: Inputs Card -->
+            <section class="card input-card glass">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-sliders header-icon"></i> Analysis Setup</h2>
+                    <p class="subtitle">Provide a candidate resume and matching job description to begin matching.</p>
+                </div>
+
+                <!-- Input Tabs -->
+                <div class="tabs-container">
+                    <button class="tab-btn active" id="tab-file"><i class="fa-solid fa-file-pdf"></i> Resume File</button>
+                    <button class="tab-btn" id="tab-text"><i class="fa-solid fa-align-left"></i> Resume Text</button>
+                </div>
+
+                <!-- Form -->
+                <form id="analyze-form">
+                    <!-- File Upload Input Area -->
+                    <div class="tab-content active" id="content-file">
+                        <div class="drag-drop-zone" id="drop-zone">
+                            <input type="file" id="resume-file" name="resume_file" accept=".pdf,.docx,.txt" style="display: none;">
+                            <div class="upload-prompt">
+                                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                                <p class="primary-prompt">Drag & drop candidate resume here</p>
+                                <p class="secondary-prompt">Supports PDF, DOCX, or TXT (Max 10MB)</p>
+                                <button type="button" class="btn btn-secondary btn-sm" id="browse-btn">Browse Files</button>
+                            </div>
+                            <div class="file-info-container" id="file-info" style="display: none;">
+                                <i class="fa-solid fa-file-lines selected-file-icon"></i>
+                                <div class="file-meta">
+                                    <span class="file-name" id="selected-file-name">filename.pdf</span>
+                                    <span class="file-size" id="selected-file-size">1.2 MB</span>
+                                </div>
+                                <button type="button" class="remove-file-btn" id="remove-file-btn"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raw Text Input Area -->
+                    <div class="tab-content" id="content-text">
+                        <div class="textarea-container">
+                            <label for="resume-text">Paste Candidate Resume Text</label>
+                            <textarea id="resume-text" placeholder="Paste full resume text here..." rows="8"></textarea>
+                            <span class="char-counter" id="resume-text-counter">0 / 50,000</span>
+                        </div>
+                    </div>
+
+                    <!-- Job Description Text Area (Required for both tabs) -->
+                    <div class="textarea-container job-desc-container">
+                        <label for="job-description">Job Description <span class="required">*</span></label>
+                        <textarea id="job-description" name="job_description" placeholder="Paste the target job description requirements here..." rows="8" required></textarea>
+                        <span class="char-counter" id="jd-counter">0 / 50,000</span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
+                        <span class="btn-text">Analyze Compatibility</span>
+                        <i class="fa-solid fa-paper-plane btn-icon"></i>
+                        <span class="spinner" style="display: none;"><i class="fa-solid fa-circle-notch fa-spin"></i> Processing...</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Side: Results Card (Initially Empty/Placeholder) -->
+            <section class="card results-card glass" id="results-panel">
+                <!-- Empty State -->
+                <div class="empty-state" id="results-empty-state">
+                    <div class="pulse-icon-container">
+                        <i class="fa-solid fa-chart-pie empty-icon"></i>
+                    </div>
+                    <h3>Waiting for Analysis</h3>
+                    <p>Enter the candidate details and click "Analyze Compatibility" to view comprehensive metrics, skill gap graphs, and recommendations.</p>
+                </div>
+
+                <!-- Loading Overlay -->
+                <div class="loading-overlay" id="loading-overlay" style="display: none;">
+                    <div class="loading-spinner-container">
+                        <div class="neon-ring"></div>
+                        <i class="fa-solid fa-brain loader-brain"></i>
+                    </div>
+                    <h3>Parsing Document & Extracting Skills</h3>
+                    <p>Running semantic matching algorithms and calculating semantic alignment scores...</p>
+                </div>
+
+                <!-- Real Results Render (Hidden by default) -->
+                <div class="results-content" id="results-content" style="display: none;">
+                    
+                    <!-- Circular Score Gauge Row -->
+                    <div class="results-summary-row">
+                        <!-- Compatibility Gauge -->
+                        <div class="gauge-container">
+                            <svg class="score-ring" width="160" height="160">
+                                <circle class="ring-bg" cx="80" cy="80" r="70"></circle>
+                                <circle class="ring-fg" id="overall-ring" cx="80" cy="80" r="70" stroke-dasharray="440" stroke-dashoffset="440"></circle>
+                            </svg>
+                            <div class="gauge-text">
+                                <span class="score-num" id="overall-score-display">0</span>
+                                <span class="score-pct">%</span>
+                                <span class="score-label">MATCH SCORE</span>
+                            </div>
+                        </div>
+
+                        <!-- Breakdowns -->
+                        <div class="score-breakdown-details">
+                            <h3>Analysis Summary</h3>
+                            <p class="summary-id-badge">ID: <span id="res-analysis-id">---</span></p>
+                            
+                            <div class="breakdown-item">
+                                <div class="breakdown-label">
+                                    <span><i class="fa-solid fa-code-compare text-emerald"></i> Skill Match Score</span>
+                                    <span id="skill-score-val">0%</span>
+                                </div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fg bg-emerald" id="skill-score-bar" style="width: 0%;"></div></div>
+                            </div>
+                            
+                            <div class="breakdown-item">
+                                <div class="breakdown-label">
+                                    <span><i class="fa-solid fa-network-wired text-indigo"></i> Semantic Similarity</span>
+                                    <span id="semantic-score-val">0%</span>
+                                </div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fg bg-indigo" id="semantic-score-bar" style="width: 0%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <!-- Skills Grid Column comparison -->
+                    <div class="skills-alignment-section">
+                        <h3><i class="fa-solid fa-cubes"></i> Skill Gap Alignment</h3>
+                        
+                        <div class="skills-grid">
+                            <!-- Matched -->
+                            <div class="skill-category-box box-matched">
+                                <h4><i class="fa-solid fa-circle-check icon-matched"></i> Matched Skills <span class="badge badge-matched" id="badge-count-matched">0</span></h4>
+                                <div class="skills-list" id="list-matched-skills"></div>
+                            </div>
+
+                            <!-- Missing -->
+                            <div class="skill-category-box box-missing">
+                                <h4><i class="fa-solid fa-circle-xmark icon-missing"></i> Missing Gaps <span class="badge badge-missing" id="badge-count-missing">0</span></h4>
+                                <div class="skills-list" id="list-missing-skills"></div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Skills -->
+                        <div class="additional-skills-box">
+                            <h4><i class="fa-solid fa-plus-circle icon-additional"></i> Additional Candidate Skills</h4>
+                            <div class="skills-list" id="list-additional-skills"></div>
+                        </div>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <!-- Actionable Recommendations -->
+                    <div class="recommendations-section">
+                        <h3><i class="fa-solid fa-lightbulb"></i> Actionable Recommendations</h3>
+                        <ul class="recommendation-timeline" id="recommendations-list"></ul>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <!-- Collapsible Semantic Matches details -->
+                    <div class="accordion-section">
+                        <button class="accordion-toggle" id="accordion-toggle">
+                            <span><i class="fa-solid fa-circle-nodes"></i> Explainable Semantic Match Logic</span>
+                            <i class="fa-solid fa-chevron-down toggle-icon" id="accordion-icon"></i>
+                        </button>
+                        <div class="accordion-content" id="accordion-content">
+                            <!-- Match Summary Cards -->
+                            <div class="match-summary-cards">
+                                <div class="m-summary-card m-exact">
+                                    <span class="m-num" id="summary-exact-count">0</span>
+                                    <span class="m-label">Exact Matches</span>
+                                </div>
+                                <div class="m-summary-card m-semantic">
+                                    <span class="m-num" id="summary-semantic-count">0</span>
+                                    <span class="m-label">Semantic Matches</span>
+                                </div>
+                                <div class="m-summary-card m-gap">
+                                    <span class="m-num" id="summary-gap-count">0</span>
+                                    <span class="m-label">Unmatched Gaps</span>
+                                </div>
+                            </div>
+
+                            <!-- Semantic Gap Explanation Box -->
+                            <div class="semantic-explanation-box">
+                                <h4>Semantic Gap & Keyword Insights</h4>
+                                <p id="semantic-explanation-text">Submit an analysis to generate semantic mapping insights and keyword recommendations.</p>
+                            </div>
+
+                            <div class="explainable-matches-table-container">
+                                <table class="explainable-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Job Required Skill</th>
+                                            <th>Candidate Matched Skill</th>
+                                            <th>Similarity Score</th>
+                                            <th>Match Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="explainable-table-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2026 Antigravity IDE. Secure Local AI Pipeline. All analysis processes execute on-device.</p>
+        </footer>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

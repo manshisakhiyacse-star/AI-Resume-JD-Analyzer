@@ -1,0 +1,6 @@
+John Doe
+Senior Software Engineer
+Email: john.doe@example.com
+
+Summary:
+Passionate backend engineer with 5 years of experience building high-scale Python applications. Experienced with FastAPI, REST APIs, and MySQL. Working extensively with Docker, Machine Learning models, NLP pipelines, and Sentence Transformers to create intelligent features.

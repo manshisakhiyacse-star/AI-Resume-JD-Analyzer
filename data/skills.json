@@ -1,0 +1,120 @@
+{
+  "categories": {
+    "programming_languages": [
+      "python",
+      "java",
+      "c++",
+      "c#",
+      "javascript",
+      "typescript",
+      "go",
+      "rust",
+      "ruby",
+      "scala",
+      "kotlin",
+      "swift"
+    ],
+    "frameworks": [
+      "fastapi",
+      "spring boot",
+      "react",
+      "django",
+      "flask",
+      "angular",
+      "vue",
+      "nextjs",
+      "pytorch",
+      "tensorflow",
+      "keras",
+      "express"
+    ],
+    "databases": [
+      "postgresql",
+      "mysql",
+      "mongodb",
+      "redis",
+      "sqlite",
+      "oracle",
+      "cassandra",
+      "elasticsearch"
+    ],
+    "cloud": [
+      "amazon web services",
+      "google cloud platform",
+      "microsoft azure"
+    ],
+    "devops": [
+      "docker",
+      "kubernetes",
+      "jenkins",
+      "terraform",
+      "ansible",
+      "github actions"
+    ],
+    "ai_ml": [
+      "machine learning",
+      "deep learning",
+      "natural language processing",
+      "computer vision",
+      "sentence transformers",
+      "large language models"
+    ],
+    "data": [
+      "pandas",
+      "numpy",
+      "scikit-learn",
+      "apache spark",
+      "hadoop",
+      "sql",
+      "data science"
+    ],
+    "tools": [
+      "git",
+      "jira",
+      "postman",
+      "docker compose"
+    ],
+    "web": [
+      "html",
+      "css",
+      "graphql",
+      "rest api"
+    ],
+    "other": [
+      "microservices",
+      "agile",
+      "scrum",
+      "system design"
+    ]
+  },
+  "aliases": {
+    "py": "python",
+    "postgres": "postgresql",
+    "js": "javascript",
+    "ts": "typescript",
+    "springboot": "spring boot",
+    "restful api": "rest api",
+    "rest api": "rest api",
+    "restful": "rest api",
+    "rest apis": "rest api",
+    "restful apis": "rest api",
+    "aws": "amazon web services",
+    "gcp": "google cloud platform",
+    "azure": "microsoft azure",
+    "k8s": "kubernetes",
+    "ml": "machine learning",
+    "dl": "deep learning",
+    "nlp": "natural language processing",
+    "llms": "large language models",
+    "llm": "large language models",
+    "spring-boot": "spring boot",
+    "reactjs": "react",
+    "react.js": "react",
+    "nodejs": "node.js",
+    "node.js": "node.js",
+    "vuejs": "vue",
+    "vue.js": "vue",
+    "next.js": "nextjs",
+    "docker-compose": "docker compose"
+  }
+}

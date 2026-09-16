@@ -1,0 +1,7 @@
+We are hiring a Senior Software Engineer.
+
+Requirements:
+- Deep experience with Python, FastAPI, and PostgreSQL.
+- Strong containerization skills using Docker.
+- Experience deploying systems to AWS.
+- Background in Machine Learning and NLP.
